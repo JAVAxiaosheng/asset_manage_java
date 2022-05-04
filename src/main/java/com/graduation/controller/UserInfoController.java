@@ -64,13 +64,12 @@ public class UserInfoController {
      * @return
      */
     @GetMapping("/query_user")
-    public R<List> queryUserInfo(int pageNum, int pageSize, String username, int role) {
+    public R<List> queryUserInfo(int pageNum, int pageSize, String username, int role, int id) {
         Page pageInfo = new Page(pageNum, pageSize);
         LambdaQueryWrapper<UserInfo> queryWrapper = new LambdaQueryWrapper();
-        queryWrapper.like(StringUtils.isNotEmpty(username), UserInfo::getUserName, username);
-        if (role >= 0) {
-            queryWrapper.eq(UserInfo::getRole, role);
-        }
+        queryWrapper.eq(StringUtils.isNotEmpty(username), UserInfo::getUserName, username).
+                eq(role >= 0, UserInfo::getRole, role).
+                eq(id >= 0, UserInfo::getId, id);
         userInfoService.page(pageInfo, queryWrapper);
         List<UserInfo> userInfoList = pageInfo.getRecords();
         return R.success(userInfoList, pageInfo.getTotal());
