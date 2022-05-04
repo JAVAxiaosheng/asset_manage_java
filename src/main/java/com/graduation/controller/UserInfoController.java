@@ -113,6 +113,12 @@ public class UserInfoController {
         return R.error("修改失败");
     }
 
+    /**
+     * 删除用户
+     *
+     * @param userInfo
+     * @return
+     */
     @DeleteMapping("delete_user")
     public R<Boolean> deleteUserInfo(@RequestBody UserInfo userInfo) {
         boolean isSuccess = userInfoService.removeById(userInfo);
